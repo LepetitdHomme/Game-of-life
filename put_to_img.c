@@ -6,7 +6,7 @@
 /*   By: csellier <camillesellier@live.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/08 23:06:32 by csellier          #+#    #+#             */
-/*   Updated: 2017/04/09 02:42:54 by csellier         ###   ########.fr       */
+/*   Updated: 2017/04/09 14:44:46 by csellier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,18 @@ static int	alive(t_env *env, int x, int y)
 	return (1);
 }
 
+static int	old(t_env *env, int x, int y)
+{
+	int		x2;
+	int		y2;
+
+	x2 = ((SCR_W - 2 * MARGE) / env->tab_size);
+	y2 = SCR_H / env->tab_size;
+	if (env->tab[(x - MARGE) / x2][y / y2].age == 1)
+		return (0);
+	return (1);
+}
+
 int			put_to_img(t_env *e)
 {
 	char	*data;
@@ -60,16 +72,26 @@ int			put_to_img(t_env *e)
 		while (y < SCR_H)
 		{
 			index = (x * b / 8) + (y * s);
-			if (in_marge(x) == 0 && in_tab(e, x, y) == 0 && alive(e, x, y) == 0)
+			if (in_marge(x) == 0 && in_tab(e, x, y) == 0)
 			{
-				data[index] = 255;
-				data[index + 1] = 0;
-				data[index + 2] = 255;
+				if (alive(e, x, y) == 0)
+				{
+					data[index] = 255;
+					data[index + 1] = 0;
+					data[index + 2] = 0;
+				}
+				else if (old(e, x, y) == 0)
+				{
+					data[index] = 127;
+					data[index + 1] = 0;
+					data[index + 2] = 0;
+				}
 			}
 			else if (in_marge(x) != 0)
 			{
 				data[index] = 127;
-				data[index + 1] = 255;
+				data[index + 1] = 127;
+				data[index + 2] = 127;
 			}
 			y++;
 		}

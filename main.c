@@ -6,7 +6,7 @@
 /*   By: csellier <camillesellier@live.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/08 23:59:42 by csellier          #+#    #+#             */
-/*   Updated: 2017/04/09 02:50:15 by csellier         ###   ########.fr       */
+/*   Updated: 2017/04/09 14:40:26 by csellier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,18 +68,30 @@ static int		init_tab(t_env *v)
 		y = 0;
 		while (y < v->tab_size)
 		{
-			if (x == 3 && y == 2)
-				v->tab[x][y].n = 1;
-			else if (x == 4 && y == 3)
-				v->tab[x][y].n = 1;
-			else if ((x == 2 || x == 3 || x == 4) && y == 4)
-				v->tab[x][y].n = 1;
+			if (get_static_seed(-1) == 0)
+			{
+				if (x == 3 && y == 2)
+					v->tab[x][y].n = 1;
+				else if (x == 4 && y == 3)
+					v->tab[x][y].n = 1;
+				else if ((x == 2 || x == 3 || x == 4) && y == 4)
+					v->tab[x][y].n = 1;
+				else
+					v->tab[x][y].n = 0;
+				if (x == v->tab_size / 2)// && y == v->tab_size / 2)
+					v->tab[x][y].n = 1;
+				v->tab[x][y].n_1 = 0;
+				v->tab[x][y].age = (v->tab[x][y].n == 1) ? 1 : 0;
+			}
 			else
-				v->tab[x][y].n = 0;
-			if (x == v->tab_size / 2)// && y == v->tab_size / 2)
-				v->tab[x][y].n = 1;
-			v->tab[x][y].n_1 = 0;
-			v->tab[x][y].age = 0;
+			{
+				if (x == v->tab_size / 2 && y == 2)
+					v->tab[x][y].n = 1;
+				else
+					v->tab[x][y].n = 0;
+				v->tab[x][y].n_1 = 0;
+				v->tab[x][y].age = (v->tab[x][y].n == 1) ? 1 : 0;
+			}
 			y++;
 		}
 		x++;
@@ -128,11 +140,24 @@ static int		reset(t_env *env)
 	return (0);
 }
 
+int				get_static_seed(int i)
+{
+	static int	seed = 0;
+
+	if (i == -2)
+		seed = (seed == 0) ? 1 : 0;
+	if (i == 1 || i == 0)
+		seed = i;
+	return (seed);
+}
+
 static int		key_press(int key, t_env *env)
 {
 	printf("%d = key\n", key);
 	if (key == SPACE)
 		reset(env);
+	if (key == KEY_P)
+		get_static_seed(-2);
 	if (key == ESC)
 		exit(EXIT_SUCCESS);
 	return (0);
