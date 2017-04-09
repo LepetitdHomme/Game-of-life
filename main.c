@@ -6,7 +6,7 @@
 /*   By: csellier <camillesellier@live.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/08 23:59:42 by csellier          #+#    #+#             */
-/*   Updated: 2017/04/09 02:18:06 by csellier         ###   ########.fr       */
+/*   Updated: 2017/04/09 02:50:15 by csellier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,8 @@ static int		init_tab(t_env *v)
 				v->tab[x][y].n = 1;
 			else
 				v->tab[x][y].n = 0;
+			if (x == v->tab_size / 2)// && y == v->tab_size / 2)
+				v->tab[x][y].n = 1;
 			v->tab[x][y].n_1 = 0;
 			v->tab[x][y].age = 0;
 			y++;
@@ -104,7 +106,7 @@ static int		expose(t_env *env)
 	if (env == NULL)
 		return (1);
 	i++;
-	if (i < 300000)
+	if (i < 30000)
 		return (0);
 	else
 		i = 0;
@@ -142,7 +144,7 @@ int				main(int ar, char **av)
 
 	(void)ar;
 	(void)av;
-	if ((env = init_env(100)) == NULL)
+	if ((env = init_env(300)) == NULL)// de grandes maps font segfault! puttoimg.c
 		return (1);
 	if (init_tab(env) != 0)
 		return (1);

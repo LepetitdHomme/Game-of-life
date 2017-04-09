@@ -6,7 +6,7 @@
 /*   By: csellier <camillesellier@live.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/08 23:06:32 by csellier          #+#    #+#             */
-/*   Updated: 2017/04/09 01:20:31 by csellier         ###   ########.fr       */
+/*   Updated: 2017/04/09 02:42:54 by csellier         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,11 @@ int			put_to_img(t_env *e)
 				data[index] = 255;
 				data[index + 1] = 0;
 				data[index + 2] = 255;
+			}
+			else if (in_marge(x) != 0)
+			{
+				data[index] = 127;
+				data[index + 1] = 255;
 			}
 			y++;
 		}
